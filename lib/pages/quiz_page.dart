@@ -4,6 +4,7 @@ import '../utils/quiz.dart';
 import '../UI/answer_button.dart';
 import '../UI/question_text.dart';
 import '../UI/right_wrong_overlay.dart';
+import './score_page.dart';
 
 
 
@@ -59,7 +60,24 @@ class QuizPageState extends State<QuizPage>{
             new AnswerButton(false, () => handleAnswer(false)),
           ], // Widget[]
         ), // Column
-        overlayShouldBeVisible == true ? new RightWrongOverlay(isCorrect) : new Container(),
+        overlayShouldBeVisible == true ? new RightWrongOverlay(
+            isCorrect,
+            (){
+              if(quiz.length == questionNumber){
+                Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(
+                    builder: (BuildContext context) => new scorePage(quiz.score, quiz.length)), (Route route) => route == null
+                );
+                return;
+              }
+              currentQuestion = quiz.nextQuestion;
+              this.setState((){
+                overlayShouldBeVisible = false;
+                questionText = currentQuestion.question;
+                questionNumber = quiz.questionNumber;
+              });
+
+            }
+        ) : new Container(),
       ], // Widget[]
     ); // Stack
   } // Widget

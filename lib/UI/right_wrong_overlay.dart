@@ -4,13 +4,15 @@ import 'dart:math';
 class RightWrongOverlay extends StatefulWidget {
 
   final bool _isCorrect;
+  final VoidCallback _onTap;
 
-  RightWrongOverlay(this._isCorrect);
+  RightWrongOverlay(this._isCorrect, this._onTap);
 
   @override
   State createState() => new RightWrongOverlayState();
 
 }
+
 
 class RightWrongOverlayState extends State<RightWrongOverlay> with SingleTickerProviderStateMixin {
 
@@ -27,12 +29,18 @@ class RightWrongOverlayState extends State<RightWrongOverlay> with SingleTickerP
   }
 
   @override
+  void dispose(){
+    _iconAnimationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context){
 
     return new Material(
       color: Colors.black54,
       child: new InkWell(
-        onTap: () => print("You tapped the overlay"),
+        onTap: () => widget._onTap(),
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
